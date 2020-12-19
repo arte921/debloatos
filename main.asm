@@ -2,51 +2,58 @@
 mov ah, 0x0e
 
 ; zet steeds een letter in al...
-mov al, 4
-; ...en stuur dan 0x10 interrupt, die inhoud van register al naar tty print
+mov al, 'f'
 int 0x10
 
-f dw 1
-v dw 0
-t dw 0
+; print:
+;     int 0x10
+;     mov al, 10
+;     int 0x10
+;     mov al, 13
+;     int 0x10
 
-i dw 0
 
-main:
-	mov	dword [f], 1
-	mov	dword [v], 0
-	mov	dword [t], 0
-	mov	dword [i], 0
+f db 1
+v db 0
+t db 0
 
-    jmp loop
+i db 0
+temp db 0
+
 
 loop:
-	cmp	dword [i], 10
+    cmp	byte [i], 5
     jge	stop
-
-	mov	eax, [v]
-	add	eax, [t]
 
     mov al, [f]
     int 0x10
 
-	mov	[f], eax
-	mov	eax, [v]
-	mov	[t], eax
-	mov	eax, [f]
-	mov	[v], eax
+    mov al, [f]
+    add al, 48
+    int 0x10
 
-	; mov	eax, [i]
-	add	dword [i], 1
-	; mov	, eax
-	jmp	loop
+    mov	al, [v]
+    add	al, [t]
+    mov [f], al
+
+    mov	al, [v]
+    mov	[t], al
+    mov	al, [f]
+    mov [v], al
+
+    mov	al, [i]
+    add	al, 1
+    mov [i], al
+    jmp	loop
 
 
 ; infinite loop
 stop:
-    jmp stop
+    mov al, 's'
+    int 0x10
+    jmp $
 
 
 ; om de 0xaa55 (om bootable te maken) aan het einde (na 510 bytes) te houden
-times 510-($-$$) dw 0
+times 510-($-$$) db 0
 dw 0xaa55
