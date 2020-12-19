@@ -6,7 +6,7 @@ mov al, 'h'
 ; ...en stuur dan 0x10 interrupt, die inhoud van register al naar tty print
 int 0x10
 
-mov al, 'e'
+mov al, 'a'
 int 0x10
 mov al, 'l'
 int 0x10
