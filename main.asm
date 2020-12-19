@@ -2,52 +2,45 @@
 mov ah, 0x0e
 
 ; zet steeds een letter in al...
-mov al, 'f'
+mov al, 'b'
 int 0x10
-
-; print:
-;     int 0x10
-;     mov al, 10
-;     int 0x10
-;     mov al, 13
-;     int 0x10
 
 
 f db 1
 v db 0
 t db 0
 
-i db 0
 temp db 0
 
 
 loop:
-    cmp	byte [i], 5
+    ; stop als greater/equal 4
+    cmp	cl, 4
     jge	stop
 
-    mov al, [f]
+    ; print de waarde van cl
+    mov al, cl
+    add al, 65
     int 0x10
 
-    mov al, [f]
-    add al, 48
-    int 0x10
+    ; f = v + t
+    mov	al, byte [v]
+    add	al, byte [t]
+    mov byte [f], al
 
-    mov	al, [v]
-    add	al, [t]
-    mov [f], al
+    ; t  = v
+    mov	al, byte [v]
+    mov	byte [t], al
 
-    mov	al, [v]
-    mov	[t], al
-    mov	al, [f]
-    mov [v], al
+    ; v = f
+    mov al, byte [f]
+    mov byte [v], al
 
-    mov	al, [i]
-    add	al, 1
-    mov [i], al
+    inc cl
+
     jmp	loop
 
 
-; infinite loop
 stop:
     mov al, 's'
     int 0x10
