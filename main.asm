@@ -1,42 +1,56 @@
 ; tty mode
 mov ah, 0x0e
 
-; zet steeds een letter in al...
-mov al, 'b'
+; zet steeds een teken in de accumulator, en interrupt 0x10 om de printen  
+mov al, 'F'
 int 0x10
 
 
-f db 1
-v db 0
+f db 0
+v db 1
 t db 0
 
-temp db 0
+i db 0
+
+mov byte [f], 2
+mov byte [v], 1
+mov byte [t], 0
+mov byte [i], 0
 
 
 loop:
-    ; stop als greater/equal 4
-    cmp	cl, 4
+    ; mov al, 'a'
+    ; int 0x10
+    ; stop als byte [i] greater/equal 4
+    cmp	byte [i], 5
     jge	stop
 
-    ; print de waarde van cl
-    mov al, cl
-    add al, 65
+    ; print de inhoud van f
+    mov al, [f]
+    add al, 48
     int 0x10
 
+    mov al, ' '
+    int 0x10
+
+    ; mov al, 'c'
+    ; int 0x10
+
     ; f = v + t
-    mov	al, byte [v]
-    add	al, byte [t]
-    mov byte [f], al
+    mov	al, [v]
+    add	al, [t]
+    mov [f], al
 
     ; t  = v
-    mov	al, byte [v]
-    mov	byte [t], al
+    mov	al, [v]
+    mov	[t], al
 
     ; v = f
-    mov al, byte [f]
-    mov byte [v], al
+    mov al, [f]
+    mov [v], al
 
-    inc cl
+    ; inc byte [f]
+    inc byte [i]
 
     jmp	loop
 
